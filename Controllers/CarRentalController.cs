@@ -3,6 +3,7 @@ using CarShareRestApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarShareRestApi.Controllers
 {
@@ -10,47 +11,26 @@ namespace CarShareRestApi.Controllers
     [ApiController]
     public class CarRentalController : ControllerBase
     {
-        private CarManager _manager = new CarManager();
-
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [HttpGet]
-        public ActionResult<List<Car>> GetAll()
+        private readonly CarDBManager _dbManager;
+        
+        public CarRentalController(CorolabPraktikDBContext context)
         {
-            List<Car> result = _manager.GetAllCars();
-            if(result.Count == 0)
+            _dbManager = new CarDBManager(context);
+        }
+
+        public ActionResult<List<RentalCar>> GetAllRentalCars()
+        {
+            List<RentalCar> rentalCars = _dbManager.GetAllRentalCars();
+
+            if (!rentalCars.Any())
             {
-                return NoContent();
+                return NotFound("No Cars here");
             }
-            return Ok(result);
+            return Ok(rentalCars);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        [HttpGet("{id}")]
-        public ActionResult<Car> Get(int id)
-        {
-            return Ok(_manager.GetCar(id));
-        }
 
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
-        [HttpPost]
-        public ActionResult<Car> Post([FromBody] Car newCar)
-        {
-            Car createdCar = new Car();
-            createdCar = _manager.AddCar(newCar);
-            return Created("api/CarRental/" + createdCar.Id, createdCar);
-        }
 
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpDelete("{id}")]
-        public ActionResult<Car> Delete(int id)
-        {
-            Car carToBeDeleted = _manager.GetCar(id);
-            _manager.DeleteCar(id);
-            return Ok(carToBeDeleted);
-        }
+
     }
 }
