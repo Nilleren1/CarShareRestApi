@@ -3,6 +3,7 @@ using CarShareRestApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CarShareRestApi.Controllers
 {
@@ -10,47 +11,55 @@ namespace CarShareRestApi.Controllers
     [ApiController]
     public class CarRentalController : ControllerBase
     {
-        private CarManager _manager = new CarManager();
+        private readonly CarDBManager _dbManager;
+        
+        public CarRentalController(CorolabPraktikDBContext context)
+        {
+            _dbManager = new CarDBManager(context);
+        }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpGet]
-        public ActionResult<List<Car>> GetAll()
+        public ActionResult<List<RentalCar>> GetAllRentalCars()
         {
-            List<Car> result = _manager.GetAllCars();
-            if(result.Count == 0)
+            List<RentalCar> rentalCars = _dbManager.GetAllRentalCars();
+
+            if (!rentalCars.Any())
             {
-                return NoContent();
+                return NotFound("No Cars here");
             }
-            return Ok(result);
+            return Ok(rentalCars);
         }
 
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
+        //Update Rental Car from id
+        [HttpPut("{id}")]
+        public RentalCar PutRentalCar(int id, [FromBody] RentalCar value)
+        {
+            return _dbManager.UpdateRentalCar(id, value);
+        }
+
         [HttpGet("{id}")]
-        public ActionResult<Car> Get(int id)
+        public ActionResult GetRentalCarById(int id)
         {
-            return Ok(_manager.GetCar(id));
+            RentalCar rentalCar = _dbManager.GetRentalCarById(id);
+
+            if (rentalCar == null)
+            {
+                return NotFound("No car with this id: " + id);
+            }
+            return Ok(rentalCar);
         }
 
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        //[ProducesResponseType(StatusCodes.Status400BadRequest)]
         [HttpPost]
-        public ActionResult<Car> Post([FromBody] Car newCar)
+        public ActionResult<RentalCar> PostRentalCar([FromBody] RentalCar newRentalCar)
         {
-            Car createdCar = new Car();
-            createdCar = _manager.AddCar(newCar);
-            return Created("api/CarRental/" + createdCar.Id, createdCar);
+            RentalCar createdRentalCar = _dbManager.AddRentalCar(newRentalCar);
+            return Ok(createdRentalCar);
         }
 
-        //[ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [HttpDelete("{id}")]
-        public ActionResult<Car> Delete(int id)
-        {
-            Car carToBeDeleted = _manager.GetCar(id);
-            _manager.DeleteCar(id);
-            return Ok(carToBeDeleted);
-        }
+
+
+
+
+
     }
 }
