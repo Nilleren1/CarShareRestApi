@@ -6,79 +6,87 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CarShareRestApi.Models
 {
-    public partial class CorolabPraktikDBContext : DbContext
+    public class CorolabPraktikDBContext : DbContext
     {
-        public CorolabPraktikDBContext()
-        {
-        }
+        public CorolabPraktikDBContext(DbContextOptions<CorolabPraktikDBContext> options) : base(options) { }
 
-        public CorolabPraktikDBContext(DbContextOptions<CorolabPraktikDBContext> options)
-            : base(options)
-        {
-        }
-
-        public virtual DbSet<Account> Accounts { get; set; }
-        public virtual DbSet<CarPooling> CarPoolings { get; set; }
-        public virtual DbSet<RentalCar> RentalCars { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=stressballserver.database.windows.net;Initial Catalog=CorolabPraktikDB;Persist Security Info=True;User ID=EmmaLaila;Password=Corolab1");
-            }
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Account>(entity =>
-            {
-                entity.Property(e => e.Email).IsUnicode(false);
-
-                entity.Property(e => e.UserAddress).IsUnicode(false);
-
-                entity.Property(e => e.UserName).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<CarPooling>(entity =>
-            {
-                entity.HasKey(e => e.CarPoolId)
-                    .HasName("PK__CarPooli__0DE56C1BA2D3596A");
-
-                entity.Property(e => e.DriveTime)
-                    .IsRowVersion()
-                    .IsConcurrencyToken();
-
-                entity.Property(e => e.EndDestination).IsUnicode(false);
-
-                entity.Property(e => e.StartDestination).IsUnicode(false);
-
-                entity.HasOne(d => d.Account)
-                    .WithMany(p => p.CarPoolings)
-                    .HasForeignKey(d => d.AccountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__CarPoolin__Accou__6A30C649");
-            });
-
-            modelBuilder.Entity<RentalCar>(entity =>
-            {
-                entity.Property(e => e.Brand).IsUnicode(false);
-
-                entity.Property(e => e.FuelType).IsUnicode(false);
-
-                entity.Property(e => e.Model).IsUnicode(false);
-
-                entity.HasOne(d => d.Account)
-                    .WithMany(p => p.RentalCars)
-                    .HasForeignKey(d => d.AccountId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK__RentalCar__Accou__6754599E");
-            });
-
-            OnModelCreatingPartial(modelBuilder);
-        }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        public DbSet<CarPooling> CarPoolings { get; set; }
+        public DbSet<RentalCar> RentalCars { get; set; }
+        public DbSet<Account> Accounts { get; set; }
+        public static readonly string Connectionstring = "Server=tcp:stressballserver.database.windows.net,1433;Initial Catalog=CorolabPraktikDB;Persist Security Info=False;User ID=EmmaLaila;Password=Corolab1;";
     }
+    //public partial class CorolabPraktikDBContext : DbContext
+    //{
+    //    public CorolabPraktikDBContext()
+    //    {
+    //    }
+
+    //    public CorolabPraktikDBContext(DbContextOptions<CorolabPraktikDBContext> options)
+    //        : base(options)
+    //    {
+    //    }
+
+    //    public virtual DbSet<Account> Accounts { get; set; }
+    //    public virtual DbSet<CarPooling> CarPoolings { get; set; }
+    //    public virtual DbSet<RentalCar> RentalCars { get; set; }
+
+    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    //    {
+    //        if (!optionsBuilder.IsConfigured)
+    //        {
+    //            optionsBuilder.UseSqlServer("Data Source=stressballserver.database.windows.net;Initial Catalog=CorolabPraktikDB;Persist Security Info=True;User ID=EmmaLaila;Password=Corolab1");
+    //        }
+    //    }
+
+    //    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //    {
+    //        modelBuilder.Entity<Account>(entity =>
+    //        {
+    //            entity.Property(e => e.Email).IsUnicode(false);
+
+    //            entity.Property(e => e.UserAddress).IsUnicode(false);
+
+    //            entity.Property(e => e.UserName).IsUnicode(false);
+    //        });
+
+    //        modelBuilder.Entity<CarPooling>(entity =>
+    //        {
+    //            entity.HasKey(e => e.CarPoolId)
+    //                .HasName("PK__CarPooli__0DE56C1BA2D3596A");
+
+    //            entity.Property(e => e.DriveTime)
+    //                .IsRowVersion()
+    //                .IsConcurrencyToken();
+
+    //            entity.Property(e => e.EndDestination).IsUnicode(false);
+
+    //            entity.Property(e => e.StartDestination).IsUnicode(false);
+
+    //            entity.HasOne(d => d.Account)
+    //                .WithMany(p => p.CarPoolings)
+    //                .HasForeignKey(d => d.AccountId)
+    //                .OnDelete(DeleteBehavior.ClientSetNull)
+    //                .HasConstraintName("FK__CarPoolin__Accou__6A30C649");
+    //        });
+
+    //        modelBuilder.Entity<RentalCar>(entity =>
+    //        {
+    //            entity.Property(e => e.Brand).IsUnicode(false);
+
+    //            entity.Property(e => e.FuelType).IsUnicode(false);
+
+    //            entity.Property(e => e.Model).IsUnicode(false);
+
+    //            entity.HasOne(d => d.Account)
+    //                .WithMany(p => p.RentalCars)
+    //                .HasForeignKey(d => d.AccountId)
+    //                .OnDelete(DeleteBehavior.ClientSetNull)
+    //                .HasConstraintName("FK__RentalCar__Accou__6754599E");
+    //        });
+
+    //        OnModelCreatingPartial(modelBuilder);
+    //    }
+
+    //    partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+    //}
 }

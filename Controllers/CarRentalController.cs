@@ -18,6 +18,7 @@ namespace CarShareRestApi.Controllers
             _dbManager = new CarDBManager(context);
         }
 
+        [HttpGet]
         public ActionResult<List<RentalCar>> GetAllRentalCars()
         {
             List<RentalCar> rentalCars = _dbManager.GetAllRentalCars();
@@ -28,6 +29,34 @@ namespace CarShareRestApi.Controllers
             }
             return Ok(rentalCars);
         }
+
+        //Update Rental Car from id
+        [HttpPut("{id}")]
+        public RentalCar PutRentalCar(int id, [FromBody] RentalCar value)
+        {
+            return _dbManager.UpdateRentalCar(id, value);
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult GetRentalCarById(int id)
+        {
+            RentalCar rentalCar = _dbManager.GetRentalCarById(id);
+
+            if (rentalCar == null)
+            {
+                return NotFound("No car with this id: " + id);
+            }
+            return Ok(rentalCar);
+        }
+
+        [HttpPost]
+        public ActionResult<RentalCar> PostRentalCar([FromBody] RentalCar newRentalCar)
+        {
+            RentalCar createdRentalCar = _dbManager.AddRentalCar(newRentalCar);
+            return Ok(createdRentalCar);
+        }
+
+
 
 
 
