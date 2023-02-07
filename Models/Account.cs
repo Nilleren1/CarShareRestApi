@@ -31,7 +31,7 @@ namespace CarShareRestApi.Models
         [StringLength(255)]
         public string Email { get; set; }
 
-        [InverseProperty(nameof(CarPooling.Account))]
+        //[InverseProperty(nameof(CarPooling.Account))]
         public virtual ICollection<CarPooling> CarPoolings { get; set; }
         [InverseProperty(nameof(RentalCar.Account))]
         public virtual ICollection<RentalCar> RentalCars { get; set; }
