@@ -19,43 +19,54 @@ namespace CarShareRestApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<RentalCar>> GetAllRentalCars()
+        public ActionResult<IEnumerable<Account>> GetAllAccounts()
         {
-            List<RentalCar> rentalCars = _dbManager.GetAllRentalCars();
+            IEnumerable<Account> accounts = _dbManager.GetAllAccounts();
 
-            if (!rentalCars.Any())
+            if (!accounts.Any())
             {
-                return NotFound("No Cars here");
+                return NotFound("No Accounts here");
             }
-            return Ok(rentalCars);
+            return Ok(accounts);
         }
 
         //Update Rental Car from id
         [HttpPut("{id}")]
-        public RentalCar PutRentalCar(int id, [FromBody] RentalCar value)
+        public Account PutAccount(int id, [FromBody] Account value)
         {
-            return _dbManager.UpdateRentalCar(id, value);
+            return _dbManager.UpdateAccount(id, value);
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetRentalCarById(int id)
+        public ActionResult GetAccountById(int id)
         {
-            RentalCar rentalCar = _dbManager.GetRentalCarById(id);
+            Account account = _dbManager.GetAccountById(id);
 
-            if (rentalCar == null)
+            if (account == null)
             {
-                return NotFound("No car with this id: " + id);
+                return NotFound("No account with this id: " + id);
             }
-            return Ok(rentalCar);
+            return Ok(account);
         }
 
         [HttpPost]
-        public ActionResult<RentalCar> PostRentalCar([FromBody] RentalCar newRentalCar)
+        public ActionResult<Account> PostAccount([FromBody] Account newAccount)
         {
-            RentalCar createdRentalCar = _dbManager.AddRentalCar(newRentalCar);
-            return Ok(createdRentalCar);
+            Account createdAccount = _dbManager.AddAccount(newAccount);
+            return Ok(createdAccount);
         }
 
+
+        [HttpDelete("{id}")]
+        public ActionResult<Account> DeleteAccount(int id)
+        {
+            Account account = _dbManager.GetAccountById(id);
+            if (account == null)
+            {
+                return NotFound("No account with that id " + id);
+            }
+            return _dbManager.DeleteAccount(id);
+        }
 
 
 

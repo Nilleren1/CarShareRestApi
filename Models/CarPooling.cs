@@ -23,10 +23,9 @@ namespace CarShareRestApi.Models
         public string EndDestination { get; set; }
         [Column(TypeName = "date")]
         public DateTime DriveDate { get; set; }
-        [Required]
-        public byte[] DriveTime { get; set; }
-        [Column(TypeName = "decimal(18, 0)")]
-        public decimal Price { get; set; }
+        
+        //[NotMapped]
+        public int Price { get; set; }
         public int NumberOfSeats { get; set; }
 
         [ForeignKey(nameof(AccountId))]
