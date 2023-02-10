@@ -19,8 +19,8 @@ namespace CarShareRestApi.Models
         }
 
         public virtual DbSet<Account> Accounts { get; set; }
-        //public virtual DbSet<CarPooling> CarPoolings { get; set; }
-        public virtual DbSet<RentalCar> RentalCars { get; set; }
+        public virtual DbSet<Car> Cars { get; set; }
+       
 
         
     }

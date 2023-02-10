@@ -1,4 +1,5 @@
 ﻿using CarShareRestApi.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,10 +27,25 @@ namespace CarShareRestApi.Manager
             //List<Account> result = new List<Account>(_corolabContext.Accounts);
             //return result.ToList();
         }
-        //Rental Car Get By ID
+
+        public IEnumerable<Car> GetAllCars()
+        {
+            using (var context = _corolabContext)
+            {
+                var car = context.Cars.ToList();
+                return car;
+            }
+        }
+        //Account Get By ID
         public Account GetAccountById(int id)
         {
             return _corolabContext.Accounts.Find(id);
+        }
+
+        //Car Get By ID
+        public Car GetCarById(int id)
+        {
+            return _corolabContext.Cars.Find(id);
         }
 
         //Rental Car Add
@@ -37,19 +53,17 @@ namespace CarShareRestApi.Manager
         {
             using (var context = _corolabContext)
             {
-                //var accounts = context.Accounts.Add(addAccount);
+                var accounts = context.Accounts.Add(addAccount);
                 _corolabContext.SaveChanges();
                 return addAccount;
             }
-            //_corolabContext.Accounts.Add(addAccount);
-            //_corolabContext.SaveChanges();
-            //return addAccount;
         }
 
         //Rental Car Delete
         public Account DeleteAccount(int id)
         {
             Account account = _corolabContext.Accounts.Find(id);
+            Car car = _corolabContext.Cars.Find(id);
             _corolabContext.Accounts.Remove(account);
             _corolabContext.SaveChanges();
             return account;
@@ -59,7 +73,6 @@ namespace CarShareRestApi.Manager
         public Account UpdateAccount(int id, Account updates)
         {
             Account account = _corolabContext.Accounts.Find(id);
-            account.AccountId = updates.AccountId;
             account.UserName = updates.UserName;
             account.DateOfBirth = updates.DateOfBirth;
             account.UserAddress = updates.UserAddress;
@@ -67,6 +80,22 @@ namespace CarShareRestApi.Manager
             account.Email = updates.Email;
             _corolabContext.SaveChanges();
             return account;
+        }
+
+        public Car UpdateCar(int id, Car updates)
+        {
+            Car car = _corolabContext.Cars.Find(id);
+            car.StartDestination = updates.StartDestination;
+            car.EndDestination = updates.EndDestination;
+            car.DriveDate = updates.DriveDate;
+            car.Price = updates.Price;
+            car.AvailableSeats = updates.AvailableSeats;
+            car.Brand = updates.Brand;
+            car.Model = updates.Model;
+            car.FuelType = updates.FuelType;
+            car.IsFull = updates.IsFull;
+            _corolabContext.SaveChanges();
+            return car;
         }
 
         //Carpooling CRUD Metoder

@@ -11,8 +11,7 @@ namespace CarShareRestApi.Models
     {
         public Account()
         {
-            CarPoolings = new HashSet<CarPooling>();
-            RentalCars = new HashSet<RentalCar>();
+            car = new HashSet<Car>();
         }
 
         [Key]
@@ -31,9 +30,8 @@ namespace CarShareRestApi.Models
         [StringLength(255)]
         public string Email { get; set; }
 
-        //[InverseProperty(nameof(CarPooling.Account))]
-        public virtual ICollection<CarPooling> CarPoolings { get; set; }
-        [InverseProperty(nameof(RentalCar.Account))]
-        public virtual ICollection<RentalCar> RentalCars { get; set; }
+        [InverseProperty(nameof(Car.Account))]
+        public virtual ICollection<Car> car { get; set; }
+
     }
 }
