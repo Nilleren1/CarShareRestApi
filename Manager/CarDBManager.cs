@@ -9,13 +9,13 @@ namespace CarShareRestApi.Manager
     {
         private readonly CorolabPraktikDBContext _corolabContext;
 
+        //Vi initialiserer vores DBContext klasse.
         public CarDBManager(CorolabPraktikDBContext context)
         {
             _corolabContext = context;
         }
-        
-        //Rental Cars CRUD Metoder
-        //Rental Cars Get All
+
+        //Vi henter en liste af Accounts
         public IEnumerable<Account> GetAllAccounts()
         {
             using (var context = _corolabContext)
@@ -23,11 +23,9 @@ namespace CarShareRestApi.Manager
                 var accounts = context.Accounts.ToList();
                 return accounts;
             }
-
-            //List<Account> result = new List<Account>(_corolabContext.Accounts);
-            //return result.ToList();
         }
 
+        //Vi henter den fulde liste af biler. Her bruger vi using (var context) for kun at hente listen med biler
         public IEnumerable<Car> GetAllCars()
         {
             using (var context = _corolabContext)
@@ -36,19 +34,19 @@ namespace CarShareRestApi.Manager
                 return car;
             }
         }
-        //Account Get By ID
+        //Vi finder en specifik account ud fra accountets id
         public Account GetAccountById(int id)
         {
             return _corolabContext.Accounts.Find(id);
         }
 
-        //Car Get By ID
+        //Vi finder en specifik bil ud fra bilens id
         public Car GetCarById(int id)
         {
             return _corolabContext.Cars.Find(id);
         }
 
-        //Rental Car Add
+        //Her tilføjer vi en ny account til vores database tabel. Værdierne til hvad Account indeholder er i vores Account.cs klasse i model folderen.
         public Account AddAccount(Account addAccount)
         {
             using (var context = _corolabContext)
@@ -59,17 +57,26 @@ namespace CarShareRestApi.Manager
             }
         }
 
-        //Rental Car Delete
+        //Her fjerner vi et Account ud fra Account.Id, dette er en sikker måde at slette en specifik account, da primary key altid er unik.
         public Account DeleteAccount(int id)
         {
             Account account = _corolabContext.Accounts.Find(id);
-            Car car = _corolabContext.Cars.Find(id);
+           // Car car = _corolabContext.Cars.Find(id);
             _corolabContext.Accounts.Remove(account);
             _corolabContext.SaveChanges();
             return account;
         }
 
-        //Rental Car Update
+        //Her fjerner vi en Car ud fra Car.Id, dette er en sikker måde at slette en specifik account, da primary key altid er unik.
+        public Car DeleteCar(int id)
+        {
+            Car car = _corolabContext.Cars.Find(id);
+            _corolabContext.Cars.Remove(car);
+            _corolabContext.SaveChanges();
+            return car;
+        }
+
+        //Vi opdaterer Account og dens værdier, Account.Id kan ikke ændres, da det er primary key og skal være unik.
         public Account UpdateAccount(int id, Account updates)
         {
             Account account = _corolabContext.Accounts.Find(id);
@@ -82,6 +89,7 @@ namespace CarShareRestApi.Manager
             return account;
         }
 
+        //Vi opdaterer Car og dens værdier, vi kan ikke opdatere Car.Id, da det er primary key. Det samme gælder for Account.Id, da en primary key skal være unik.
         public Car UpdateCar(int id, Car updates)
         {
             Car car = _corolabContext.Cars.Find(id);
@@ -97,52 +105,5 @@ namespace CarShareRestApi.Manager
             _corolabContext.SaveChanges();
             return car;
         }
-
-        //Carpooling CRUD Metoder
-        //Carpool Get All
-        //public List<CarPooling> GetAllCarPools()
-        //{
-        //    List<CarPooling> result = new List<CarPooling>(_corolabContext.CarPoolings);
-
-        //    return result.ToList();
-        //}
-
-        ////Carpool Get By ID
-        //public CarPooling GetCarPoolById(int id)
-        //{
-        //    return _corolabContext.CarPoolings.Find(id);
-        //}
-
-        ////Carpool Add Carpool
-        //public CarPooling AddCarPool(CarPooling addCarpool)
-        //{
-        //    addCarpool.CarPoolId = 0;
-        //    _corolabContext.CarPoolings.Add(addCarpool);
-        //    _corolabContext.SaveChanges();
-        //    return addCarpool;
-        //}
-
-        ////Carpool Delete
-        //public CarPooling DeleteCarPool(int id)
-        //{
-        //    CarPooling carpool = _corolabContext.CarPoolings.Find(id);
-        //    _corolabContext.CarPoolings.Remove(carpool);
-        //    _corolabContext.SaveChanges();
-        //    return carpool;
-        //}
-
-        ////Carpool Update
-        //public CarPooling UpdateCarPool(int id, CarPooling updates)
-        //{
-        //    CarPooling CarPool = _corolabContext.CarPoolings.Find(id);
-        //    CarPool.StartDestination = updates.StartDestination;
-        //    CarPool.EndDestination = updates.EndDestination;
-        //    CarPool.DriveDate = updates.DriveDate;
-        //    CarPool.DriveTime = updates.DriveTime;
-        //    CarPool.Price = updates.Price;
-        //    CarPool.NumberOfSeats = updates.NumberOfSeats;
-        //    _corolabContext.SaveChanges();
-        //    return CarPool;
-        //}
     }
 }
