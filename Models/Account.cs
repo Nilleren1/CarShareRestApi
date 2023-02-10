@@ -10,10 +10,10 @@ namespace CarShareRestApi.Models
     public partial class Account
     {
         //Constructoren til vores Account objekt. Vi bruger HashSet<Car>() til 
-      /*  public Account()
+        public Account()
         {
             car = new HashSet<Car>();
-        }*/
+        }
 
         //Vores primary key, som gør at alle accounts har et unikt Id. Dette er automatiseret i databasen med IDENTITY (1, 1).
         [Key]
