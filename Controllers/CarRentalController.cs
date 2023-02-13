@@ -1,4 +1,4 @@
-﻿using CarShareRestApi.Manager;
+using CarShareRestApi.Manager;
 using CarShareRestApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -79,6 +79,15 @@ namespace CarShareRestApi.Controllers
             return Ok(createdAccount);
         }
 
+        
+
+        [HttpPost]
+        [Route("/CarPost")]
+        public ActionResult<Car> PostCar([FromBody] Car newCar)
+        {
+            Car createdCar = _dbManager.AddCar(newCar);
+            return Ok(createdCar);
+        }
 
         [HttpDelete]
         [Route("/AccountDelete")]
@@ -91,14 +100,6 @@ namespace CarShareRestApi.Controllers
             }
             return _dbManager.DeleteAccount(id);
         }
-
-        [HttpDelete]
-        [Route("/CarDelete")]
-        public ActionResult<Car> DeleteCar(int id)
-        {
-            Car car = _dbManager.GetCarById(id);
-            if (car == null)
-            {
                 return NotFound("No car with that id " + id);
             }
             return _dbManager.DeleteCar(id);

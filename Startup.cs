@@ -36,6 +36,9 @@ namespace CarShareRestApi
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CarShareRestApi", Version = "v1" });
             });
 
+            //CORS added allowing all
+            services.AddCors(options => options.AddPolicy("Allow All", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+
             services.AddDbContext<CorolabPraktikDBContext>(opt => opt.UseSqlServer(CorolabPraktikDBContext.Connectionstring));
 
             services.AddControllers().AddJsonOptions(x =>

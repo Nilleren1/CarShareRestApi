@@ -1,7 +1,8 @@
-﻿using CarShareRestApi.Models;
+using CarShareRestApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CarShareRestApi.Manager
 {
@@ -57,7 +58,19 @@ namespace CarShareRestApi.Manager
             }
         }
 
-        //Her fjerner vi et Account ud fra Account.Id, dette er en sikker måde at slette en specifik account, da primary key altid er unik.
+        public Car AddCar(Car addCar)
+        {
+
+            Account account = GetAccountById(addCar.AccountId);
+            if (addCar.AccountId == account.AccountId)
+            {
+                _corolabContext.Add(addCar);
+                _corolabContext.SaveChanges();
+                return addCar;
+            }
+            return addCar;
+        }
+        //Rental Car Delete
         public Account DeleteAccount(int id)
         {
             Account account = _corolabContext.Accounts.Find(id);
@@ -67,16 +80,6 @@ namespace CarShareRestApi.Manager
             return account;
         }
 
-        //Her fjerner vi en Car ud fra Car.Id, dette er en sikker måde at slette en specifik account, da primary key altid er unik.
-        public Car DeleteCar(int id)
-        {
-            Car car = _corolabContext.Cars.Find(id);
-            _corolabContext.Cars.Remove(car);
-            _corolabContext.SaveChanges();
-            return car;
-        }
-
-        //Vi opdaterer Account og dens værdier, Account.Id kan ikke ændres, da det er primary key og skal være unik.
         public Account UpdateAccount(int id, Account updates)
         {
             Account account = _corolabContext.Accounts.Find(id);
