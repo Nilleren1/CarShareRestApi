@@ -65,11 +65,38 @@ namespace CarShareRestApi.Controllers
         }
 
         [HttpPut]
-        [Route("/GetCarByID")]
+        [Route("/PutCarByID")]
         public Car PutCar(int id, [FromBody] Car value)
         {
             return _dbManager.UpdateCar(id, value);
         }
+
+        [HttpGet]
+        [Route("/GetAccountByID")]
+        public ActionResult<Account> GetAccountById(int id)
+        {
+            Account account = _dbManager.GetAccountById(id);
+
+            if (account == null)
+            {
+                return NotFound("No account with this id: " + id);
+            }
+            return Ok(account);
+        }
+
+        [HttpGet]
+        [Route("/GetCarByID")]
+        public ActionResult<Car> GetCarById(int id)
+        {
+            Car car = _dbManager.GetCarById(id);
+
+            if (car == null)
+            {
+                return NotFound("No car with this id: " + id);
+            }
+            return Ok(car);
+        }
+
 
         [HttpPost]
         [Route("/AccountPost")]
