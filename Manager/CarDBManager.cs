@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 
 namespace CarShareRestApi.Manager
 {
@@ -59,6 +60,25 @@ namespace CarShareRestApi.Manager
             }
         }
 
+        public Car AddCar(Car addCar)
+        {
+
+            Account account = GetAccountById(addCar.AccountId);
+            if (addCar.AccountId == account.AccountId)
+            {
+                _corolabContext.Add(addCar);
+                _corolabContext.SaveChanges();
+                return addCar;
+            }
+            return addCar;
+
+            //using (var context = _corolabContext)
+            //{
+            //    var cars = context.Cars.Add(addCar);
+            //    _corolabContext.SaveChanges();
+            //    return addCar;
+            //}
+        }
         //Rental Car Delete
         public Account DeleteAccount(int id)
         {
@@ -67,6 +87,14 @@ namespace CarShareRestApi.Manager
             _corolabContext.Accounts.Remove(account);
             _corolabContext.SaveChanges();
             return account;
+        }
+
+        public Car DeleteCar(int id)
+        {
+            Car car = _corolabContext.Cars.Find(id);
+            _corolabContext.Cars.Remove(car);
+            _corolabContext.SaveChanges();
+            return car;
         }
 
         //Rental Car Update
