@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "apis1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.ApiManagement/service/CorolabAPIManagement/apis/CarShareRestApiCorolabPraktik2023",
+      "type": "apis.azure"
+    }
+  }
+}
