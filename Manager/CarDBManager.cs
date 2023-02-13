@@ -79,6 +79,14 @@ namespace CarShareRestApi.Manager
             _corolabContext.SaveChanges();
             return account;
         }
+        public Car DeleteCar(int id)
+        {
+            Car car = _corolabContext.Cars.Find(id);
+            // Car car = _corolabContext.Cars.Find(id);
+            _corolabContext.Cars.Remove(car);
+            _corolabContext.SaveChanges();
+            return car;
+        }
 
         public Account UpdateAccount(int id, Account updates)
         {

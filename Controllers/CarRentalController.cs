@@ -9,7 +9,6 @@ using HttpPutAttribute = Microsoft.AspNetCore.Mvc.HttpPutAttribute;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
-using System.Web.Http;
 using RoutePrefixAttribute = System.Web.Mvc.RoutePrefixAttribute;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
 
@@ -127,9 +126,18 @@ namespace CarShareRestApi.Controllers
             }
             return _dbManager.DeleteAccount(id);
         }
+
+        [HttpDelete]
+        [Route("/CarDelete")]
+        public ActionResult<Car> DeleteCar(int id)
+        {
+            Car car = _dbManager.GetCarById(id);
+            if(car == null){
                 return NotFound("No car with that id " + id);
             }
             return _dbManager.DeleteCar(id);
+           
         }
+
     }
 }
