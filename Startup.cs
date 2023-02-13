@@ -29,15 +29,18 @@ namespace CarShareRestApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //CORS added allowing all
+            services.AddCors(options => options.AddPolicy("AllowAll",
+                builder => builder.AllowAnyOrigin()
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()));
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "CarShareRestApi", Version = "v1" });
             });
-
-            //CORS added allowing all
-            services.AddCors(options => options.AddPolicy("Allow All", builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()));
+            
 
             services.AddDbContext<CorolabPraktikDBContext>(opt => opt.UseSqlServer(CorolabPraktikDBContext.Connectionstring));
 
@@ -61,6 +64,8 @@ namespace CarShareRestApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors("AllowAll");
 
             app.UseAuthorization();
 
