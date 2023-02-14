@@ -19,6 +19,8 @@ namespace CarShareRestApi
 {
     public class Startup
     {
+        public const string allowAllCorsPolicy = "allowAllCorsPolicy";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -30,10 +32,12 @@ namespace CarShareRestApi
         public void ConfigureServices(IServiceCollection services)
         {
             //CORS added allowing all
-            services.AddCors(options => options.AddPolicy("AllowAll",
-                builder => builder.AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()));
+            services.AddCors(options => {
+                options.AddPolicy(allowAllCorsPolicy, policy => policy.
+                    AllowAnyOrigin().
+                    AllowAnyMethod().
+                    AllowAnyHeader());
+            });
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -68,7 +72,7 @@ namespace CarShareRestApi
 
             app.UseRouting();
 
-            app.UseCors("AllowAll");
+            app.UseCors(allowAllCorsPolicy);
 
             app.UseAuthorization();
 
