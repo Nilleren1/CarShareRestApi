@@ -17,22 +17,34 @@ namespace CarShareRestApi.Manager
         }
 
         //Vi henter en liste af Accounts
-        public IEnumerable<Account> GetAllAccounts()
+        public List<Account> GetAllAccounts()
         {
             using (var context = _corolabContext)
             {
                 var accounts = context.Accounts.ToList();
+
                 return accounts;
             }
         }
 
         //Vi henter den fulde liste af biler. Her bruger vi using (var context) for kun at hente listen med biler
-        public IEnumerable<Car> GetAllCars()
+        public List<Car> GetAllCars(DateTime? dateTimeFilter)
         {
+            
+
             using (var context = _corolabContext)
             {
-                var car = context.Cars.ToList();
-                return car;
+                //Vi sørger for, at vi kan hente Car klassen og dens indhold.
+                List<Car> result = new List<Car>(_corolabContext.Cars);
+
+                if(dateTimeFilter != null)
+                {
+                    //dato skal ligge i dette if statement, da objektet ellers vil være null, hvis man forsøger at finde alle biler frem uden filtreringen.
+                    //vi filtrerer efter dato, hvor vi derefter tjekker at datoen man indtaster passer med det i databasen.
+                    var dato = dateTimeFilter.Value.Date;
+                    result = result.FindAll(filterItem => filterItem.DriveDate.Equals(dato));
+                }
+                return result.ToList();
             }
         }
         //Vi finder en specifik account ud fra accountets id

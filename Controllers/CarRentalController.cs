@@ -11,6 +11,7 @@ using HttpPostAttribute = Microsoft.AspNetCore.Mvc.HttpPostAttribute;
 using HttpDeleteAttribute = Microsoft.AspNetCore.Mvc.HttpDeleteAttribute;
 using RoutePrefixAttribute = System.Web.Mvc.RoutePrefixAttribute;
 using FromBodyAttribute = Microsoft.AspNetCore.Mvc.FromBodyAttribute;
+using System;
 
 namespace CarShareRestApi.Controllers
 {
@@ -23,6 +24,13 @@ namespace CarShareRestApi.Controllers
         public CarRentalController(CorolabPraktikDBContext context)
         {
             _dbManager = new CarDBManager(context);
+        }
+
+        [HttpGet]
+        [Route("api/[controller]")]
+        public ActionResult<List<Account>> GetAll()
+        {
+            return null;
         }
 
         [HttpGet]
@@ -40,9 +48,9 @@ namespace CarShareRestApi.Controllers
 
         [HttpGet]
         [Route("/Cars")]
-        public ActionResult<List<Car>> GetAllCars()
+        public ActionResult<List<Car>> GetAllCars([FromQuery] DateTime? dateTimeFilter)
         {
-            IEnumerable<Car> cars = _dbManager.GetAllCars();
+            IEnumerable<Car> cars = _dbManager.GetAllCars(dateTimeFilter);
 
             if (!cars.Any())
             {
