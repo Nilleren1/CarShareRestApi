@@ -35,11 +35,12 @@ namespace CarShareRestApi.Manager
                 //Vi sørger for, at vi kan hente Car klassen og dens indhold.
                 List<Car> result = new List<Car>(_corolabContext.Cars);
 
-
+                
                 //Vi sørger for at vi filtrerer i listen, så der kun bliver de biler, hvor der stadig er ledige pladser, da en fyldt bil ikke har nogen interesse for brugeren.
-                result = result.FindAll(filterItem => filterItem.IsFull.Equals(false));
+                result = result.FindAll(filterItem => filterItem.IsFull.Equals(false)); //ISFULL filtrering
 
-                if (dateTimeFilter != null)
+
+                if (dateTimeFilter != null) // DATO filtrering
                 {
                     //dato skal ligge i dette if statement, da objektet ellers vil være null, hvis man forsøger at finde alle biler frem uden filtreringen.
                     //vi filtrerer efter dato, hvor vi derefter tjekker at datoen man indtaster passer med det i databasen.
